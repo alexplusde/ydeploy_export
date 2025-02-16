@@ -51,10 +51,20 @@ $fragment->setVar('title', $this->i18n('ydeploy_export.title'), false);
 $fragment->setVar('body', $form->get(), false);
 echo $fragment->parse('core/page/section.php');
 
+// in $_POST befindet sich 'table' mit den ausgewählten Tabellen in einem zufälligen Schlüssel:
+// ['123'] => ['table' => ['rex_article', 'rex_article_slice']]
+
+$tables = [];
+foreach($_POST as $key => $value) {
+    if (is_array($value) && isset($value['table'])) {
+        $tables = $value['table'];
+        break;
+    }
+}
+
 if (rex_get('export', 'int', 0) === 1) {
     $filename = date('Y-m-d His').'_ydeploy_export';
-    YDeployExport::forceBackup($filename, rex_post('table', 'array'));
-    
+    YDeployExport::forceBackup($filename, $tables);
     rex_response::sendFile(rex_backup::getDir().$filename.'.sql', 'application/octet-stream', 'attachment');
     exit;
 }
