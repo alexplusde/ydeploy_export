@@ -5,6 +5,7 @@ use Alexplusde\YDeployExport\YDeployExport;
 $addon = rex_addon::get('ydeploy_export');
 
 $form = rex_config_form::factory($addon->getName());
+$form->addParam('export', '1');
 
 $tables_never = [rex::getTable('action') => null, rex::getTable('module') => null, rex::getTable('module_action') => null, rex::getTable('template') => null];
 $ydeploy_tables_never = [];
@@ -14,7 +15,7 @@ if (\rex::isBackend() && \rex_addon::get('ydeploy')->isAvailable()) {
     $config = \rex_addon::get('ydeploy')->getProperty('config');
     $tables = $config['fixtures']['tables'];
     foreach ($tables as $table => $filter) {
-        $ydeploy_tables_never[rex::getTablePrefix().$table] = null;
+        $ydeploy_tables_never[rex::getTablePrefix() . $table] = null;
     }
 }
 
@@ -22,7 +23,7 @@ if (\rex::isBackend() && \rex_addon::get('ydeploy')->isAvailable()) {
 $tables_all = rex_sql::factory()->getTables(rex::getTablePrefix());
 $tables_options = [];
 
-$field = $form->addSelectField('table');
+$field = $form->addSelectField('tables');
 $field->setLabel($this->i18n('ydeploy_export_tables'));
 $field->setNotice($this->i18n('ydeploy_export_tables_notice', implode(', ', array_keys($tables_never))));
 
@@ -43,7 +44,6 @@ foreach ($tables_all as $table) {
     }
 }
 
-$form->addParam('export', '1');
 
 $fragment = new rex_fragment();
 $fragment->setVar('class', 'info', false);
@@ -51,20 +51,16 @@ $fragment->setVar('title', $this->i18n('ydeploy_export.title'), false);
 $fragment->setVar('body', $form->get(), false);
 echo $fragment->parse('core/page/section.php');
 
-// in $_POST befindet sich 'table' mit den ausgewählten Tabellen in einem zufälligen Schlüssel:
-// ['123'] => ['table' => ['rex_article', 'rex_article_slice']]
-
-$tables = [];
-foreach($_POST as $key => $value) {
-    if (is_array($value) && isset($value['table'])) {
-        $tables = $value['table'];
-        break;
-    }
-}
-
 if (rex_get('export', 'int', 0) === 1) {
-    $filename = date('Y-m-d His').'_ydeploy_export';
+    $tables = [];
+    foreach ($_POST as $key => $value) {
+        if (is_array($value) && isset($value['tables'])) {
+            $tables = $value['tables'];
+            break;
+        }
+    }
+    $filename = date('Y-m-d His') . '_ydeploy_export';
     YDeployExport::forceBackup($filename, $tables);
-    rex_response::sendFile(rex_backup::getDir().$filename.'.sql', 'application/octet-stream', 'attachment');
+    rex_response::sendFile(rex_backup::getDir() . $filename . '.sql', 'application/octet-stream', 'attachment');
     exit;
 }
