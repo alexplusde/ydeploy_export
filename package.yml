@@ -1,16 +1,16 @@
 
 
 package: ydeploy_export
-version: '2.1.0-dev-2025-02-15'
+version: '1.0.0'
 author: 'Alexander Walther'
 supportpage: https://github.com/alexplusde/ydeploy_export
 
 requires:
     php:
-        version: '>8.1,<9'
-    redaxo: ^5.16
+        version: '>=8.1,<9'
+    redaxo: ^5.18.0
     packages:
-        backup: '>0'
+        backup: '>=2.9.0'
 
 pages:
     backup/ydeploy_export:
