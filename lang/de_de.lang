@@ -1,5 +1,7 @@
-ydeploy_export.title = YDeployExport
+ydeploy_export.title = YDeploy-Export
 
-ydeploy_export.label.export = Export
 ydeploy_export.label.export.description = Exportiere diese Tabellen als SQL-Datei, um sie lokal zu imporiteren.
 ydeploy_export.label.tables = Tabellen
+
+ydeploy_export_tables = SQL-Export folgender Tabellen
+ydeploy_export_tables_notice = Hinweis: Folgende Tabellen werden über das Deployment nach Live importiert: {0}.

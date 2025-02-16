@@ -9,8 +9,7 @@ class YDeployExport
 {
     public static function forceBackup($filename = '', $tables = ['rex_module', 'rex_template'])
     {
-        $dir = rex_backup::getDir() . '/';
-
+        $dir = rex_backup::getDir();
 
         if (!$filename) {
             $now = new DateTimeImmutable();

@@ -5,7 +5,6 @@ version: '2.1.0-dev-2025-02-15'
 author: 'Alexander Walther'
 supportpage: https://github.com/alexplusde/ydeploy_export
 
-
 requires:
     php:
         version: '>8.1,<9'
@@ -14,13 +13,13 @@ requires:
         backup: '>0'
 
 pages:
-    ydeploy/export:
+    backup/ydeploy_export:
         title: translate:ydeploy_export.title
         icon: rex-icon fa-file-excel-o
         perm: admin
 
 default_config:
-    table: 'rex_article,rex_article_slice,rex_media,rex_media_category'
+    tables: [rex_article,rex_article_slice,rex_media,rex_media_category]
 
 installer_ignore:
 - .git
