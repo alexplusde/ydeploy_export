@@ -1,6 +1,6 @@
 <?php
 
-namespace Alexplusde\Blaupause;
+namespace Alexplusde\YDeployExport;
 
 use rex;
 use rex_addon;
@@ -20,11 +20,11 @@ use rex_yform_manager_table;
 /*
 if (rex_addon::get('yform')->isAvailable() && !rex::isSafeMode()) {
     rex_yform_manager_dataset::setModelClass(
-        rex::getTable('blaupause_entry'),
+        rex::getTable('ydeploy_export_entry'),
         Entry::class
     );
     rex_yform_manager_dataset::setModelClass(
-        rex::getTable('blaupause_category'),
+        rex::getTable('ydeploy_export_category'),
         Category::class
     );
 }
@@ -32,16 +32,16 @@ if (rex_addon::get('yform')->isAvailable() && !rex::isSafeMode()) {
 
 /* Nutzt du T-Racks? <https://github.com/alexplusde/tracks> Module und Addons bei der Entwicklung synchroinsieren */
 /*
-if (rex::isBackend() && rex::isDebugMode() && rex_config::get('blaupause', 'dev')) {
-    \Tracks\🦖::writeModule('blaupause', 'blaupause.%');
-    \Tracks\🦖::writeTemplate('blaupause', 'blaupause.%');
+if (rex::isBackend() && rex::isDebugMode() && rex_config::get('ydeploy_export', 'dev')) {
+    \Tracks\🦖::writeModule('ydeploy_export', 'ydeploy_export.%');
+    \Tracks\🦖::writeTemplate('ydeploy_export', 'ydeploy_export.%');
 }
 */
 
 // Prüfen, ob ein anderes Addon installiert ist, bspw. Cronjob-Addon
 /*
 if (rex_addon::get('cronjob')->isAvailable() && !rex::isSafeMode()) {
-    rex_cronjob_manager::registerType(Cronjob\Blaupause::class);
+    rex_cronjob_manager::registerType(Cronjob\YDeployExport::class);
 }
 */
 
@@ -70,25 +70,25 @@ if (rex::isBackend() && rex::getUser()) {
 // YForm-Tabelle? `+`-Button im Hauptmenü hinzufügen
 /*
 
-if (rex::isBackend() && \rex_addon::get('blaupause') && \rex_addon::get('blaupause')->isAvailable() && !rex::isSafeMode()) {
-    $addon = rex_addon::get('blaupause');
+if (rex::isBackend() && \rex_addon::get('ydeploy_export') && \rex_addon::get('ydeploy_export')->isAvailable() && !rex::isSafeMode()) {
+    $addon = rex_addon::get('ydeploy_export');
     $pages = $addon->getProperty('pages');
     // oder $page = $addon->getProperty('page');
 
     if (rex::isBackend() && !empty($_REQUEST)) {
-        $_csrf_key = rex_yform_manager_table::get('rex_blaupause')->getCSRFKey();
+        $_csrf_key = rex_yform_manager_table::get('rex_ydeploy_export')->getCSRFKey();
 
         $token = rex_csrf_token::factory($_csrf_key)->getUrlParams();
 
         $params = [];
-        $params['table_name'] = 'rex_blaupause'; // Tabellenname anpassen
+        $params['table_name'] = 'rex_ydeploy_export'; // Tabellenname anpassen
         $params['rex_yform_manager_popup'] = '0';
         $params['_csrf_token'] = $token['_csrf_token'];
         $params['func'] = 'add';
 
-        $href = rex_url::backendPage('blaupause/entry', $params);
+        $href = rex_url::backendPage('ydeploy_export/entry', $params);
 
-        $pages['blaupause']['title'] .= ' <a class="label label-primary tex-primary" style="position: absolute; right: 18px; top: 10px; padding: 0.2em 0.6em 0.3em; border-radius: 3px; color: white; display: inline; width: auto;" href="' . $href . '">+</a>';
+        $pages['ydeploy_export']['title'] .= ' <a class="label label-primary tex-primary" style="position: absolute; right: 18px; top: 10px; padding: 0.2em 0.6em 0.3em; border-radius: 3px; color: white; display: inline; width: auto;" href="' . $href . '">+</a>';
         $addon->setProperty('pages', $pages);
         // oder $page['title'] .= ' <a class="label label-primary tex-primary" style="position: absolute; right: 18px; top: 10px; padding: 0.2em 0.6em 0.3em; border-radius: 3px; color: white; display: inline; width: auto;" href="' . $href . '">+</a>';
         // oder $addon->setProperty('page', $page);
