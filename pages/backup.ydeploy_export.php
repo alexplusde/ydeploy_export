@@ -52,7 +52,8 @@ $fragment->setVar('body', $form->get(), false);
 echo $fragment->parse('core/page/section.php');
 
 if (rex_get('export', 'int', 0) === 1) {
-    $tables = explode(',', rex_config::get('ydeploy_export', 'tables', ''));
+
+    $tables = array_filter(explode('|', rex_config::get('ydeploy_export', 'tables', '')));
     if($tables !== []) {
         $filename = date('Y-m-d His') . '_ydeploy_export';
         YDeployExport::forceBackup($filename, $tables);
