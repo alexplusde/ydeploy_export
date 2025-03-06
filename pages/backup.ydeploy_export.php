@@ -52,15 +52,12 @@ $fragment->setVar('body', $form->get(), false);
 echo $fragment->parse('core/page/section.php');
 
 if (rex_get('export', 'int', 0) === 1) {
-    $tables = [];
-    foreach ($_POST as $key => $value) {
-        if (is_array($value) && isset($value['tables'])) {
-            $tables = $value['tables'];
-            break;
-        }
+
+    $tables = array_filter(explode('|', rex_config::get('ydeploy_export', 'tables', '')));
+    if($tables !== []) {
+        $filename = date('Y-m-d His') . '_ydeploy_export';
+        YDeployExport::forceBackup($filename, $tables);
+        rex_response::sendFile(rex_backup::getDir() . $filename . '.sql', 'application/octet-stream', 'attachment');
+        exit;
     }
-    $filename = date('Y-m-d His') . '_ydeploy_export';
-    YDeployExport::forceBackup($filename, $tables);
-    rex_response::sendFile(rex_backup::getDir() . $filename . '.sql', 'application/octet-stream', 'attachment');
-    exit;
 }
