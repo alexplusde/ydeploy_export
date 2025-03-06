@@ -7,7 +7,7 @@ use rex_backup;
 
 class YDeployExport
 {
-    public static function forceBackup($filename = '', $tables = ['rex_article', 'rex_article_slice', 'rex_media', 'rex_media_category'])
+    public static function forceBackup(string $filename = 'export', array $tables = ['rex_article', 'rex_article_slice', 'rex_media', 'rex_media_category']) : bool
     {
         $dir = rex_backup::getDir();
 
